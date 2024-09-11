@@ -10,6 +10,7 @@ require (
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/aws/aws-sdk-go v1.44.95
 	github.com/coredns/caddy v1.1.1
+	github.com/coredns/coredns v1.10.0
 	github.com/dnstap/golang-dnstap v0.4.0
 	github.com/farsightsec/golang-framestream v0.3.0
 	github.com/go-logr/logr v1.2.3
@@ -119,3 +120,4 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
+replace github.com/coredns/coredns v1.10.0 => github.com/khchiang1121/coredns v1.10.2
