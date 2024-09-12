@@ -114,12 +114,11 @@ func (f *Forward) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg
 			// All upstream proxies are dead, assume healthcheck is completely broken and randomly
 			// select an upstream to connect to.
 			HealthcheckBrokenCount.Add(1)
-			if opts.forceForward {
-				r := new(random)
-				proxy = r.List(f.proxies)[0]
-			}else {
+			if opts.skipForward {
 				return dns.RcodeServerFailure, ErrNoHealthy
 			}
+			r := new(random)
+			proxy = r.List(f.proxies)[0]
 		}
 
 		if span != nil {
@@ -237,7 +236,7 @@ type options struct {
 	preferUDP          bool
 	hcRecursionDesired bool
 	hcDomain           string
-	forceForward		   bool
+	skipForward		   bool
 }
 
 var defaultTimeout = 5 * time.Second
