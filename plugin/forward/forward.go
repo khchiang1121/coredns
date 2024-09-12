@@ -56,7 +56,7 @@ type Forward struct {
 
 // New returns a new Forward.
 func New() *Forward {
-	f := &Forward{maxfails: 2, tlsConfig: new(tls.Config), expire: defaultExpire, p: new(random), from: ".", hcInterval: hcInterval, opts: options{forceTCP: false, preferUDP: false, hcRecursionDesired: true, hcDomain: "."}}
+	f := &Forward{maxfails: 2, tlsConfig: new(tls.Config), expire: defaultExpire, p: new(random), from: ".", hcInterval: hcInterval, opts: options{forceTCP: false, preferUDP: false, hcRecursionDesired: true, hcDomain: ".", skipForward: false}}
 	return f
 }
 
