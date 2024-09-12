@@ -105,6 +105,7 @@ func (f *Forward) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg
 
 		proxy := list[i]
 		i++
+		opts := f.opts
 		if proxy.Down(f.maxfails) {
 			fails++
 			if fails < len(f.proxies) {
@@ -112,12 +113,13 @@ func (f *Forward) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg
 			}
 			// All upstream proxies are dead, assume healthcheck is completely broken and randomly
 			// select an upstream to connect to.
-			// r := new(random)
-			// proxy = r.List(f.proxies)[0]
-
 			HealthcheckBrokenCount.Add(1)
-			// All upstream proxies are dead
-			return dns.RcodeServerFailure, upstreamErr
+			if opts.forceForward {
+				r := new(random)
+				proxy = r.List(f.proxies)[0]
+			}else {
+				return dns.RcodeServerFailure, ErrNoHealthy
+			}
 		}
 
 		if span != nil {
@@ -134,7 +136,6 @@ func (f *Forward) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg
 			ret *dns.Msg
 			err error
 		)
-		opts := f.opts
 		for {
 			ret, err = proxy.Connect(ctx, state, opts)
 			if err == ErrCachedClosed { // Remote side closed conn, can only happen with TCP.
@@ -236,6 +237,7 @@ type options struct {
 	preferUDP          bool
 	hcRecursionDesired bool
 	hcDomain           string
+	forceForward		   bool
 }
 
 var defaultTimeout = 5 * time.Second
