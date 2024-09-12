@@ -122,4 +122,5 @@ require (
 )
 
 replace github.com/coredns/coredns v1.10.0 => github.com/khchiang1121/coredns v1.10.6
+
 retract [v1.10.2, v1.10.5]
