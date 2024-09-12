@@ -286,7 +286,6 @@ func parseBlock(c *caddy.Controller, f *Forward) error {
 			return c.ArgErr()
 		}
 		f.opts.skipForward = true
-
 	default:
 		return c.Errf("unknown property '%s'", c.Val())
 	}
